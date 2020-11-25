@@ -1,0 +1,53 @@
+<odoo>
+  <data>
+            <!--Bista Location list/tree view-->
+     <record model="ir.ui.view" id="bista_training.location_list">
+      <field name="name">bista_location list</field>
+      <field name="model">bista.location</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+            <field name="country_id"/>
+            <field name="state_id" />
+        </tree>
+      </field>
+    </record>
+
+            <!-- Bista Location Form View    -->
+      <record model="ir.ui.view" id="bista_training.location_form">
+      <field name="name">bista_location form</field>
+      <field name="model">bista.location</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+            <field name="name" class="oe_title" required="1"/>
+
+              </group>
+              <group>
+            <div class="o_address_format" >
+                <field name="street" placeholder="Street..." class="o_address_street" />
+                <field name="street2" placeholder="Street 2..." class="o_address_street" />
+                <field name="city" placeholder="City" class="o_address_city" />
+                <field name="country_id" placeholder="Country" class="o_address_country" required="1"/>
+                <field name="state_id" class="o_address_state" placeholder="State"  context="{'country_id': country_id, 'default_country_id': country_id}"/>
+
+            </div>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+         <!-- actions opening views on models -->
+
+      <!-- action for Location master-->
+    <record model="ir.actions.act_window" id="bista_training.action_location_master">
+      <field name="name">Bista Location</field>
+      <field name="res_model">bista.location</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+       </data>
+</odoo>

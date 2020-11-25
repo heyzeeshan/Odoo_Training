@@ -1,0 +1,45 @@
+<odoo>
+  <data>
+            <!--Bista Location list/tree view-->
+     <record model="ir.ui.view" id="bista_training.designation_list">
+      <field name="name">bista_designation list</field>
+      <field name="model">bista.designation</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+
+        </tree>
+      </field>
+    </record>
+
+            <!-- Bista Location Form View    -->
+      <record model="ir.ui.view" id="bista_training.designation_form">
+      <field name="name">bista_designation form</field>
+      <field name="model">bista.designation</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+            <field name="name" class="oe_title" required="1" placeholder="eg: Developer/Fresher/Tester/Business Analysist"/>
+
+              </group>
+              <group>
+
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+         <!-- actions opening views on models -->
+
+      <!-- action for Location master-->
+    <record model="ir.actions.act_window" id="bista_training.action_designation_master">
+      <field name="name">Employee Designation</field>
+      <field name="res_model">bista.designation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+       </data>
+</odoo>

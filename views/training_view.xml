@@ -1,0 +1,94 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+<!--Bista Training window Tree View-->
+    <record model="ir.ui.view" id="bista_training.list">
+      <field name="name">bista_training list</field>
+      <field name="model">bista_training.bista_training</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" required="1" placeholder="Name"/>
+          <field name="intern" required="1" placeholder="No of Interns"/>
+          <field name="date" required="1" placeholder="Pick a Date"/>
+        </tree>
+      </field>
+    </record>
+
+
+
+<!-- Bista Training Window Form View    -->
+    <record model="ir.ui.view" id="bista_training.form">
+      <field name="name">bista_training form</field>
+      <field name="model">bista_training.bista_training</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+<!--              column 1-->
+              <group>
+                <field name="name" required="1" placeholder="Name"/>
+                <field name="intern" required="1" placeholder="No of Interns"/>
+              </group>
+<!--              column 2-->
+              <group>
+                <field name="date" required="1" placeholder="Pick a Date"/>
+              </group>
+            </group>
+<!--              notebook-->
+            <notebook>
+<!--              Tab 1-->
+              <page string="Trainee">
+                <field name="trainee_ids">
+                  <tree string="Trainee" editable="bottom">
+                      <field name="trainee_id" readonly="1"/>
+                    <field name="name" />
+                    <field name="email"/>
+                      <field name="doj" />
+                  </tree>
+
+                </field>
+              </page>
+<!--              Tab 2-->
+              <page string="Training Schedule">
+
+              </page>
+            </notebook>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+
+<!-- action for bista training window-->
+    <record model="ir.actions.act_window" id="bista_training.action_window">
+      <field name="name">Bista Training Batches</field>
+      <field name="res_model">bista_training.bista_training</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="bista_training.action_server">
+      <field name="name">bista_training server</field>
+      <field name="model_id" ref="model_bista_training_bista_training"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+
+  </data>
+</odoo>

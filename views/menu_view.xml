@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+<!-- Top menu item -->
+
+    <menuitem name="Bista Training" id="bista_training.menu_root" web_icon="bista_training,static/description/icon.png"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Training" id="bista_training.menu_1" parent="bista_training.menu_root"/>
+      <menuitem name="Training Subjects" id="bista_training.menu_2" parent="bista_training.menu_root" action="bista_training.action_subjects_master"/>
+      <menuitem name="Training Topics" id="bista_training.menu_3" parent="bista_training.menu_root" action="bista_training.action_topics_master"/>
+
+
+<!--
+    <menuitem name="Menu 2" id="bista_training.menu_2" parent="bista_training.menu_root"/>
+-->
+    <!-- actions -->
+    <menuitem name="Training Details" id="bista_training.menu_1_list" parent="bista_training.menu_1"
+              action="bista_training.action_window"/>
+    <menuitem name="Trainee Master" id="bista_training.menu_trainee_menu" parent="bista_training.menu_1"
+              action="bista_training.action_trainee_master"/>
+    <menuitem name="Trainer Master" id="bista_training.menu_trainer_menu" parent="bista_training.menu_1"
+              action="bista_training.action_trainer_master"/>
+      <menuitem name="Location Master" id="bista_training.menu_location_menu" parent="bista_training.menu_1"
+              action="bista_training.action_location_master"/>
+      <menuitem name="Designation Master" id="bista_training.menu_designation_menu" parent="bista_training.menu_1"
+              action="bista_training.action_designation_master"/>
+
+  <!--  <menuitem name="Server to list" id="bista_training" parent="bista_training.menu_2"
+              action="bista_training.action_server"/>-->
+ </data>
+</odoo>
