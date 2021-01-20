@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="view_account_invoice_report_search_partner_inherited" model="ir.ui.view">
+         <field name="name">account.invoice.report.search</field>
+         <field name="model">account.invoice.report</field>
+        <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
+         <field name="arch" type="xml">
+             <xpath expr="//field[@name='product_categ_id']" position="before">
+                 <!-- Add your fields or attributes here -->
+                 <filter string="Partner Code" name="partner_code" type="col"/>
+                <separator/>
+             </xpath>
+         </field>
+    </record>
+</data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+    <record id="delete_product_group" model="res.groups">
+            <field name="name">Allow Delete Product</field>
+    </record>
+
+    <record id="edit_partner_group" model="res.groups">
+            <field name="name">Allow Edit Partners</field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

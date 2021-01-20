@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="report_custom_saleorder">
+             <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div style="border-style: solid; border-width: 5px; border-color: #B0543E;">
+                        <div class="page m-4 p-4" >
+                            <div style="text-align: right">
+                                <span>Date: </span><span class="m-0" t-field="o.date_order" t-options='{"widget": "date"}'/><br/>
+                                <span>Order # </span><span t-field="o.name"/>
+                            </div>
+                            <h1 style="color:#E2A292">
+                                    <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                                        <span t-if="o.state in ['draft','sent']">Quotation # </span><span t-field="o.name"/>
+
+                                    </t>
+                            </h1>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td scope="col">
+                                            <div style="text-align: left">
+                                                <span t-field="o.company_id.name"/><br/>
+                                                <span t-field="o.company_id.street"/><br/>
+                                                <span t-field="o.company_id.city"/>,<span t-field="o.company_id.zip"/><br/>
+                                                <span t-field="o.company_id.phone"/><br/>
+                                                <span t-field="o.company_id.email"/>
+                                            </div>
+                                        </td>
+                                        <td scope="col">
+                                            <span style="color:#D34E4E; text-align: left">Ship To</span>
+                                        </td>
+                                        <td scope="col">
+                                            <div style="text-align: right">
+                                                <span t-field="o.partner_id.name"/><br/>
+                                                <span t-field="o.partner_id.street"/><br/>
+                                                <span t-field="o.partner_id.city"/>,<span t-field="o.partner_id.zip"/><br/>
+                                                <span t-field="o.partner_id.phone"/><br/>
+                                                <span t-field="o.partner_id.email"/>
+                                            </div>
+                                        </td>
+                                        <td scope="col">
+                                        </td>
+                                        <td scope="col">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr style="background-color:#A84129; color: white; font-style: italic">
+                                      <th scope="col">
+                                            <strong>Your Reference:</strong>
+                                      </th>
+                                      <th scope="col">
+                                            <strong>Order Date:</strong>
+                                      </th>
+
+                                      <th scope="col">
+                                            <strong>Quotation Date:</strong>
+                                      </th>
+
+                                      <th scope="col">
+                                            <strong>Expiration:</strong>
+                                      </th>
+
+                                      <th scope="col">
+                                            <strong>Salesperson:</strong>
+                                      </th>
+
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                          <tr>
+                                              <td scope="col">
+                                                  <div t-if="o.client_order_ref" class="col-auto mw-100 mb-2">
+                                                    <p class="m-0" t-field="o.client_order_ref"/>
+                                                  </div>
+                                              </td>
+                                              <td scope="col">
+                                                  <div t-if="o.date_order and o.state not in ['draft','sent']" class="col-auto mw-100 mb-2">
+                                                    <p class="m-0" t-field="o.date_order"/>
+                                                  </div>
+                                              </td>
+                                              <td scope="col">
+                                                  <div t-if="o.date_order and o.state in ['draft','sent']" class="col-auto mw-100 mb-2">
+                                                    <p class="m-0" t-field="o.date_order" t-options='{"widget": "date"}'/>
+                                                  </div>
+                                              </td>
+                                              <td scope="col">
+                                                  <div t-if="o.validity_date and o.state in ['draft', 'sent']" class="col-auto mw-100 mb-2" name="expiration_date">
+                                                      <p class="m-0" t-field="o.validity_date"/>
+                                                  </div>
+                                              </td>
+                                              <td scope="col">
+                                                  <div t-if="o.user_id.name" class="col-auto mw-100 mb-2">
+                                                      <p class="m-0" t-field="o.user_id"/>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                  </tbody>
+                            </table>
+                            <table class="table table-striped table-bordered table-sm">
+                                <thead>
+                                    <tr style="background-color:#A84129; color: white; font-style: italic">
+
+                                      <th scope="col" name="th_description">
+                                            <strong>Description</strong>
+                                      </th>
+
+                                      <th scope="col" name="th_quantity">
+                                            <strong>Quantity</strong>
+                                      </th>
+
+                                      <th scope="col" name="th_priceunit">
+                                            <strong>Unit Price</strong>
+                                      </th>
+
+                                       <th scope="col" name="th_discount" t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">
+                                            <span>Disc.%</span>
+                                       </th>
+
+                                      <th scope="col" name="th_taxes">
+                                            <strong>Taxes</strong>
+                                      </th>
+
+                                      <th scope="col" name="th_subtotal">
+                                            <span groups="account.group_show_line_subtotals_tax_excluded">Amount</span>
+                                            <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                                      </th>
+
+                                    </tr>
+                                  </thead>
+                                  <tbody class="sale_tbody">
+                                      <t t-foreach="o.order_line" t-as="line">
+
+<!--                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>-->
+<!--                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>-->
+
+                                          <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                             <t t-if="not line.display_type">
+                                                <td name="td_name"><span t-field="line.name"/></td>
+
+                                                <td name="td_quantity" class="text-right">
+                                                    <span t-field="line.product_uom_qty"/>
+                                                    <span t-field="line.product_uom" groups="uom.group_uom"/>
+                                                </td>
+
+                                                <td name="td_priceunit" class="text-right">
+                                                    <span t-field="line.price_unit"/>
+                                                </td>
+
+                                                <td t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">
+                                                    <span t-field="line.discount"/>
+                                                </td>
+
+                                                <td name="td_taxes" class="text-right">
+                                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>
+                                                </td>
+
+                                                <td name="td_subtotal" class="text-right o_price_total">
+                                                    <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                    <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                                </td>
+                                             </t>
+                                              <t t-if="line.display_type == 'line_section'">
+                                                    <td name="td_section_line" colspan="99">
+                                                        <span t-field="line.name"/>
+                                                    </td>
+                                                    <t t-set="current_section" t-value="line"/>
+                                                    <t t-set="current_subtotal" t-value="0"/>
+                                              </t>
+                                              <t t-if="line.display_type == 'line_note'">
+                                                  <td name="td_note_line" colspan="99">
+                                                    <span t-field="line.name"/>
+                                                  </td>
+                                              </t>
+                                          </tr>
+
+                                          <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section')">
+                                            <tr class="is-subtotal text-right">
+                                                <td name="td_section_subtotal" colspan="99">
+                                                    <strong class="mr16">Subtotal</strong>
+                                                        <span
+                                                            t-esc="current_subtotal"
+                                                            t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                                        />
+                                                </td>
+                                            </tr>
+                                          </t>
+
+                                      </t>
+                                  </tbody>
+                            </table>
+                            <div class="clearfix" name="so_total_summary">
+                <div id="total" class="row" name="total">
+                    <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                        <table class="table table-striped table-bordered table-sm">
+                            <tr class="o_subtotal">
+                                <td name="td_amount_untaxed_label"><strong>Subtotal</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <span t-field="o.amount_untaxed"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                <tr style="">
+                                    <t t-if="amount_by_group[5] == 1 and o.amount_untaxed == amount_by_group[2]">
+                                        <td name="td_amount_by_group_label_3">
+                                            <span t-esc="amount_by_group[0]"/>
+                                            <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'/></span>
+                                        </td>
+                                        <td name="td_amount_by_group_3" class="text-right o_price_total">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                    <t t-else ="">
+                                        <td name="td_amount_by_group_label">
+                                            <span t-esc="amount_by_group[0]"/>
+                                        </td>
+                                        <td name="td_amount_by_group" class="text-right o_price_total">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr class="border-black o_total">
+                                <td name="td_amount_total_label"><strong>Total</strong></td>
+                                <td name="td_amount_total" class="text-right">
+                                    <span t-field="o.amount_total"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                <br/><br/><br/><br/>
+                            <div style="text-align: right" >
+                                <span>Make all checks payable to </span><span t-field="o.company_id.name"/><br/>
+                                <b><i><span style="color:#A84129; font-size:20px;">Thank you for your business!</span></i></b>
+                            </div>
+                             <img src='/web/binary/company_logo' class="text-left" style="max-height: 65px;" alt="Logo"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+             </t>
+        </template>
+    </data>
+</odoo>

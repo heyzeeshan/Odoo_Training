@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <template id="invoice_report_inherit" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='col-auto mw-100 mb-2']" position="after">
+                <div t-if="o.invoice_origin" class="col-auto mw-100 mb-2">
+                    <strong>Partner Code:</strong>
+                    <p class="m-0" t-field="o.partner_id.partner_code"/>
+                </div>
+            </xpath>
+             <!--Counter before for loop-->
+            <xpath expr="//t[@t-foreach='lines']" position="before">
+                <t t-set="counter" t-value="0"/>
+            </xpath>
+            <!--Counter in for loop-->
+            <xpath expr="//t[@t-foreach='lines']" position="inside">
+                <t t-set="counter" t-value="counter+1"/>
+            </xpath>
+            <!--Print Counter after for loop-->
+            <xpath expr="//t[@t-foreach='lines']" position="after">
+                <tr class="text-left">
+                    <td name="td_section_product_count">
+                        <strong class="mr16">Total No. of Items</strong>
+                        <span t-esc="counter"/>
+                    </td>
+                </tr>
+            </xpath>
+        </template>
+
+</odoo>

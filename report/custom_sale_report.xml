@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="custom_sale_report" model="ir.actions.report">
+            <!--Field names-->
+            <field name="name">Custom Quotation / Order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="model">sale.order</field>
+
+                <!--Template defination link template and this file-->
+            <field name="report_name">partner_extension.report_custom_saleorder</field>
+            <field name="report_file">partner_extension.report_custom_saleorder</field>
+            <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+
+
+            <!--Link model-->
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <!--Type-->
+            <field name="binding_type">report</field>
+
+        </record>
+    </data>
+</odoo>
